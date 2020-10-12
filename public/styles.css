@@ -1,3 +1,39 @@
+* {
+	font-family: 'Raleway', sans-serif;
+}
+
 body {
 	margin: 0 0;
+}
+
+#form {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	width: 80vw;
+	height: 80vh;
+}
+
+#form * {
+	font-size: min(4vw, 3em);
+	overflow: hidden;
+}
+
+#form select {
+    text-align-last: center;
+}
+
+#form button {
+	display: none;
+}
+
+#form select, button {
+	border: none;
+	border-radius: 10px;
+	margin: .5vh 0;
+	flex-grow: 1;
 }

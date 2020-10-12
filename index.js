@@ -17,20 +17,23 @@ let SOCKET_LIST = {}
 let gameSheet = new SimpleSheetInterface('1DQG_nWMH_SwkxSNzz9g6H1cESAcXUhj3ZSmjJfhhrIs', './client_secret.json')
 
 ;(async () => {
-	await gameSheet.init(6, 11)
-		.then(res => {
-			io.sockets.on('connection', (socket) => {
-				console.log(`User ${socket.id} connected`)
-				SOCKET_LIST[socket.id] = socket
+	await gameSheet.initSheet(6, 11)
+	io.sockets.on("connection", socket => {
+		console.log(`User ${socket.id} connected`)
+		SOCKET_LIST[socket.id] = socket
 
-				socket.on('update', data => {
-					gameSheet.setCellValue(data.row, data.col, data.val)
-				})
-				
-				socket.on('disconnect', () => {
-					console.log(`User ${socket.id} disconnected`)
-					delete SOCKET_LIST[socket.id]
-				})
-			})
+		socket.on("getScore", async player => {
+			socket.emit("getScoreResponse", await gameSheet.getCellValue(player, 7))
 		})
+		
+		socket.on("addCell", async data => {
+			await gameSheet.addCellValue(data.row, data.col, data.diff)
+			socket.emit("addCellResponse")
+		})
+		
+		socket.on("disconnect", () => {
+			console.log(`User ${socket.id} disconnected`)
+			delete SOCKET_LIST[socket.id]
+		})
+	})
 })()
