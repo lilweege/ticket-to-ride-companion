@@ -1,4 +1,7 @@
 console.log("server running")
+
+require('dotenv').config()
+
 let location = '/public'
 let express = require('express')
 let app = express()
