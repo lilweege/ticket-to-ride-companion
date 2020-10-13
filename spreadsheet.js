@@ -4,7 +4,10 @@ const { GoogleSpreadsheet } = require('google-spreadsheet')
 class SimpleSheetInterface {
 	constructor(id, secret) {
 		this.id = id
-		this.secret = require(secret)
+		this.secret = process.env.HEROKU ? {
+			client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+			private_key: process.env.GOOGLE_PRIVATE_KEY,
+		} : require(secret)
 	}
 	
 	async initSheet(rows, cols, page = 0) {
