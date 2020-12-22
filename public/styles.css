@@ -23,7 +23,6 @@ body {
 }
 
 #form * {
-	flex-grow: 1;
 	font-size: min(4vw, 3em);
 	overflow: hidden;
 }
@@ -32,19 +31,32 @@ body {
     text-align-last: center;
 }
 
-#form button {
+.sBtn, .sSpn {
 	display: none;
 }
 
 .row {
+	flex-grow: 1;
 	display: flex;
-	margin: .5vh 0;
 	flex-flow: row wrap;
+	align-items: center;
+	margin: .5vh 0;
 }
 
 .row * {
-	border: none;
-	border-radius: 10px;
 	flex-grow: 1;
+}
+
+#color, .sBtn {
 	height: 100%;
+	border: none;
+	border-radius: 0.5em;
+}
+
+.sBtn {
+	flex-grow: 3;
+}
+
+.sSpn {
+	flex-grow: 1;
 }

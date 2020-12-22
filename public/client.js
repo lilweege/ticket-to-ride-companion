@@ -1,25 +1,27 @@
 let socket = io()
-console.log("connected with id" + socket.id)
+console.log("connected to socket", socket)
 
-const colorsArr = ["#FFFFFF", "#FF7575", "#57BCD9", "#4BFE78", "#FFF06A", "#808080"]
-const loadingTxt = "Loading..."
+const loadingScore = "Loading..."
+const loadingTrain = "..."
 
 window.addEventListener('DOMContentLoaded', e => {
-	let buttons = form.querySelectorAll("button")
+	let buttons = form.getElementsByClassName('sBtn')
+	let spans = form.getElementsByClassName('sSpn')
+	console.log(spans)
 	
 	for (let btn of buttons) {
 		btn.addEventListener("click", e => {
 			e.preventDefault()
 			
-			let [sign, column] = btn.id.split("")
-
+			let column = parseInt(btn.parentElement.id)
+			
 			let diff
-			if (sign === '-')
-				diff = -1
-			else if (sign === '+')
+			if (btn.innerText[0] === '+')
 				diff = 1
-
-			if (!diff || !column)
+			else if (btn.innerText[0] === '-')
+				diff = -1
+			
+			if (!column || !diff)
 				return
 			
 			socket.emit("addCell", {
@@ -27,27 +29,57 @@ window.addEventListener('DOMContentLoaded', e => {
 				col: column,
 				diff: diff
 			})
-			score.innerText = loadingTxt
+			score.innerText = loadingScore
+			document.getElementById(column).querySelectorAll('span')[0].innerText = loadingTrain
 		})
 	}
 	
 	color.addEventListener("change", e => {
-		socket.emit("getScore", color.selectedIndex)
-		score.innerText = loadingTxt
-		
-		color.style.backgroundColor = colorsArr[color.selectedIndex]
+
+		let hexValue = color.options[color.selectedIndex].value
+		color.style.backgroundColor = hexValue
 		for (let btn of buttons) {
 			if (btn.style.display !== "inline")
 				btn.style.display = "inline"
-			btn.style.backgroundColor = colorsArr[color.selectedIndex]
+			btn.style.backgroundColor = hexValue
 		}
+		
+		for (let span of spans) {
+			if (span.style.display !== "inline")
+				span.style.display = "inline"
+			
+			span.innerText = loadingTrain
+		}
+		score.innerText = loadingScore
+		
+		
+		for (let c = 0; c <= 8; ++c)
+			socket.emit("getCell", {
+				row: color.selectedIndex,
+				col: c
+			})
 	})
 	
-	socket.on("addCellResponse", () => {
-		socket.emit("getScore", color.selectedIndex)
+	socket.on("addCellResponse", data => {
+		socket.emit("getCell", {
+			row: color.selectedIndex,
+			col: 7
+		})
+		socket.emit("getCell", {
+			row: color.selectedIndex,
+			col: data.request.col
+		})
 	})
 	
-	socket.on("getScoreResponse", res => {
-		score.innerText = res
+	socket.on("getCellResponse", data => {
+		// console.log(data.request.col, data)
+		let val = data.response.result ? data.response.result : 0
+		
+		if (data.request.col === 7) {
+			score.innerText = val
+		}
+		else {
+			document.getElementById(data.request.col).querySelectorAll('span')[0].innerText = val
+		}
 	})
 });
