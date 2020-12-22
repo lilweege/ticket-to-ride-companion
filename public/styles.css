@@ -18,7 +18,12 @@ body {
 	height: 80vh;
 }
 
+#form {
+	flex-direction: column;
+}
+
 #form * {
+	flex-grow: 1;
 	font-size: min(4vw, 3em);
 	overflow: hidden;
 }
@@ -31,9 +36,15 @@ body {
 	display: none;
 }
 
-#form select, button {
+.row {
+	display: flex;
+	margin: .5vh 0;
+	flex-flow: row wrap;
+}
+
+.row * {
 	border: none;
 	border-radius: 10px;
-	margin: .5vh 0;
 	flex-grow: 1;
+	height: 100%;
 }

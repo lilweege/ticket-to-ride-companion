@@ -1,4 +1,4 @@
-console.log("server running")
+
 
 require('dotenv').config()
 
@@ -12,6 +12,7 @@ app.get('/', (req, res) => {
 app.use(location, express.static(__dirname + location))
 let port = process.env.PORT || 4000
 serv.listen(port)
+console.log("running on port", port)
 
 let { SimpleSheetInterface } = require('./spreadsheet.js')
 let socket = require('socket.io')
