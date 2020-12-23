@@ -1,7 +1,7 @@
 let socket = io()
 console.log("connected to socket", socket)
 
-const loadingScore = "Loading..."
+const loadingText = "Loading..."
 const loadingTrain = "..."
 
 window.addEventListener('DOMContentLoaded', e => {
@@ -29,7 +29,8 @@ window.addEventListener('DOMContentLoaded', e => {
 				col: column,
 				diff: diff
 			})
-			score.innerText = loadingScore
+			score.innerText = loadingText
+			trains.innerText = loadingText
 			document.getElementById(column).querySelectorAll('span')[0].innerText = loadingTrain
 		})
 	}
@@ -50,7 +51,8 @@ window.addEventListener('DOMContentLoaded', e => {
 			
 			span.innerText = loadingTrain
 		}
-		score.innerText = loadingScore
+		score.innerText = loadingText
+		trains.innerText = loadingText
 		
 		
 		for (let c = 0; c <= 8; ++c)
@@ -80,6 +82,13 @@ window.addEventListener('DOMContentLoaded', e => {
 		}
 		else {
 			document.getElementById(data.request.col).querySelectorAll('span')[0].innerText = val
+			let total = 0
+			for (let span of spans) {
+				let v = parseInt(span.innerText)
+				if (!isNaN(v))
+					total += v
+			}
+			trains.innerText = total
 		}
 	})
 });
