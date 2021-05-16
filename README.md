@@ -1,4 +1,4 @@
-# Ticket to Ride score tracker
+# Ticket to Ride companion score tracker
 easily keep track of the score of your Ticket to Ride game using an automatically updating spreadsheet!
 
 
